@@ -1,0 +1,19 @@
+{
+   "author":"i@darren.work",
+   "browser_action": {
+      "default_icon": "api.png",
+      "default_popup": "popup.html",
+      "default_title": "ApiTest"
+   },
+   "description": "轻量级的接口调试工具",
+   "icons": {
+      "128": "api.png",
+      "16": "api.png",
+      "32": "api.png"
+   },
+   "manifest_version": 2,
+   "name": "ApiTest",
+   "permissions": [ "http://*/*", "https://*/*", "cookies", "storage" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0"
+}
