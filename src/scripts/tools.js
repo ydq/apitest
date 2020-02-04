@@ -22,15 +22,15 @@ const parseArr = (str) => str.split(/[\r|\n]+/)
     return {key,val:item.substr(key.length+1)}
 })
 
-const parseFormData = (arr) => {
+const parseFormData = (arr,fn=o=>o) => {
     let form = new FormData()
     arr.filter(item => item.key && item.val)
-        .forEach(item => form.append(item.key,item.val));
+        .forEach(item => form.append(fn(item.key),fn(item.val)));
     return form;
 }
-const parseQueryStr = (arr) => arr
+const parseQueryStr = (arr,fn=o=>o) => arr
     .filter(item => item.key && item.val)
-    .map(item => `${item.key}=${item.val}`)
+    .map(item => `${fn(item.key)}=${fn(item.val)}`)
     .join('&')
 
 const parseText = (arr) => 
@@ -38,15 +38,20 @@ const parseText = (arr) =>
         .map(item => item.key+':'+item.val)
         .join('\n')
 
-const parseObject = (arr) => {
+const parseObject = (arr,fn=o=>o) => {
     let obj = {};
     arr.filter(item => item.key||item.val)
-    .forEach(item => obj[item.key] = item.val);
+    .forEach(item => obj[fn(item.key)] = fn(item.val));
     return obj;
 }
 
 
 const firstUpperCase = (str) => str.substr(0,1).toUpperCase();
+
+
+const prettyText = (str,len) => {
+    return str.length <= len?str:str.substr(0,len-1)+'...'
+}
 
 const addItem = arr => {
     arr.push({key:'',val:''})
@@ -62,6 +67,6 @@ const checkArr = arr => {
 export {
     cache,clear,clone,mixin,
     parseArr,parseFormData,parseText,parseObject,parseQueryStr,
-    firstUpperCase,
+    firstUpperCase,prettyText,
     addItem,checkArr
 }

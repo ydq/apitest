@@ -1,6 +1,6 @@
 <template>
   <div class="modal active">
-      <a href="#" class="modal-overlay"></a>
+      <a class="modal-overlay"></a>
       <div class="modal-container p-2">
         <div class="modal-header p-2">
           <div class="modal-title h5">{{title}}</div>

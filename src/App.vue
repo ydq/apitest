@@ -5,17 +5,16 @@
 
         <ul class="tab tab-block">
           <li class="tab-item" :class="{active:tab == 0}" @click="tab = 0">
-            <a href="#">收藏</a>
+            <a class="c-hand"><i class="icon icon-people"></i> 收藏</a>
           </li>
           <li class="tab-item" :class="{active:tab == 1}" @click="tab = 1">
-            <a href="#">历史记录</a>
+            <a class="c-hand"><i class="icon icon-time"></i> 历史记录</a>
           </li>
         </ul>
-
-        <div v-if="tab == 0">
-          <ul class="menu">
+        <div class="left-tab-content">
+          <ul class="menu" v-if="tab == 0">
             <li class="menu-item" v-for="(f,i) in favlist" :key="f.time">
-              <a href="#" @click="req.history = f;refresh=Date.now()">
+              <a class="c-hand" @click="req.history = f;refresh=Date.now()">
                 <span class="label mr-1 tooltip tooltip-right" 
                 :data-tooltip="f.type"
                 :class="{'label-success':f.type == 'get',
@@ -33,11 +32,11 @@
               </div>
             </li>
           </ul>
-        </div>
-        <div v-else>
-          <ul class="menu">
-            <li class="menu-item" v-for="(h,i) in history" :key="h.time">
-              <a href="#" @click="req.history = h;refresh=Date.now()">
+          <ul class="menu" v-else>
+            <li class="menu-item tooltip tooltip-bottom" v-for="(h,i) in history" 
+            :key="h.time"
+            :data-tooltip="new Date(h.time).format('yyyy-MM-dd HH:mm:ss')">
+              <a class="c-hand" @click="req.history = h;refresh=Date.now()">
                 <span class="label mr-1 tooltip tooltip-right" 
                 :data-tooltip="h.type"
                 :class="{'label-success':h.type == 'get',
@@ -86,7 +85,7 @@ export default {
 
     const refresh = ref(Date.now())
 
-    const tab = ref(1)
+    const tab = ref(0)
 
     const prettyName = req => {
       let name = req.name || req.url;
@@ -100,6 +99,7 @@ export default {
           history.value.length = 15
         }
         cache(API_HISTORY,history.value)
+        tab.value = 1
       }
     }
 
@@ -134,13 +134,15 @@ export default {
 
 </script>
 
-<style scoped>
+<style>
 .container{padding:0}
-.left-side,.main-container{max-height:100%;overflow-y: auto;}
+.left-side,.main-container{max-height:100%;}
 .left-side .menu{box-shadow: none;}
-.fullh{height:100%;}
-.col-gapless>.column:first-child{width:250px;box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);z-index:1}
-.col-gapless>.column:last-child{background:#F8F8F8;}
+.left-side{width:250px;box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);z-index:1}
+.main-container{background:#F8F8F8;}
 i.c-hand{cursor: pointer !important;}
+.left-side,.main-container{display: flex;flex-flow: column;overflow: hidden;}
+.left-side>div{flex: 1;overflow-y: auto;}
+.left-tab-content{position: relative;}
 </style>
   

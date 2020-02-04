@@ -1,5 +1,5 @@
 
-::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track-piece{background-color:rgba(0,0,0,0)}
 ::-webkit-scrollbar-thumb{background:rgba(87,85,217,.2)}
 ::-webkit-scrollbar-thumb:vertical:hover,::-webkit-scrollbar-thumb:horizontal:hover{background:rgba(48, 46, 205, 0.41)}
@@ -7,11 +7,16 @@ html,body,#app,.container{height:100%;width:100%}
 body{
     font-family: "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
     font-size:.75rem;
+    overflow: hidden;
 }
-textarea{resize: none;}
+textarea{resize: vertical;}
+.table tbody tr:last-child td{border:none}
 #app{min-width:960px}
 .h1, .h2, .h3, .h4, .h5, .h6,h1,h2,h3,h4,h5,h6,b,strong,th{font-weight: 100;}
 .modal.active .modal-overlay, .modal:target .modal-overlay{
     background: rgba(0,0,0,.05);
     backdrop-filter: blur(3px);
 }
+.p-sticky{top:0;z-index:1;background:#F8F8F8;box-shadow: 0 1px 0 #dadee4}
+.ani{transition:all .5s ease}
+.fullh{height:100%;}
