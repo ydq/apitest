@@ -91,13 +91,13 @@ export default {
                 envlist.value[env.index] = curr;
             }
             mixin(env,emptyEnv)
-            cache(API_ENV,envlist)
+            cache(API_ENV,envlist.value)
         }
         const delEnv = () => {
             if(env.index >= 0){
                 envlist.value.splice(env.index,1)
                 mixin(env,emptyEnv)
-                cache(API_ENV,envlist)
+                cache(API_ENV,envlist.value)
             }
         }
 

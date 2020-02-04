@@ -24,7 +24,7 @@
     
     <div class="resp-tab-content ani" :class="{hide:tab.hide,full:tab.full}">
       <div v-if="tab.curr == 0">
-        <pre class="code apihl"><code v-html="fullResp.resp"></code></pre>
+        <pre class="code m-1 apihl"><code v-html="fullResp.resp"></code></pre>
       </div>
       <div v-else-if="tab.curr == 1">
         <table class="table p-relative">
@@ -37,7 +37,7 @@
           <tbody>
             <tr v-for="h in fullResp.headers" :key="h.key">
               <td class="p-1">{{h.key}}</td>
-              <td class="p-1">{{h.val}}</td>
+              <td class="p-1 text-primary">{{h.val}}</td>
             </tr>
           </tbody>
         </table>
@@ -59,8 +59,8 @@
           </thead>
           <tbody>
             <tr v-for="cookie in fullResp.cookies" :key="cookie.name" class="cookie">
-              <td class="p-1 text-break">{{cookie.name}}</td>
-              <td class="p-1 text-break">{{cookie.value}}</td>
+              <td class="p-1 text-break text-primary">{{cookie.name}}</td>
+              <td class="p-1 text-break text-primary">{{cookie.value}}</td>
               <td class="p-1">{{cookie.domain}}</td>
               <td class="p-1">
                 <label class="form-checkbox">
@@ -110,18 +110,21 @@ export default {
       })
       const fullResp = reactive({resp:'',headers:[],cookies:[]})
 
+      const parseHTML = text => text.replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
       const parseRespData = (resp) => {
         if(resp.error){
           fullResp.resp = resp.error
-        } else if(resp.status >= 200 && resp.status < 300){
-          if(resp.headers.get('Content-Type').indexOf('application/json') >= 0){
-            resp.json().then(json=>fullResp.resp = apihl(JSON.stringify(json,null,4)))
-          } else {
-            resp.text().then(text=>fullResp.resp = apihl(text))
-          }
         } else {
-          fullResp.resp = resp.statusText
+          if(resp.headers.get('Content-Type').indexOf('application/json') >= 0){
+            resp.json()
+              .then(json=>fullResp.resp = apihl(JSON.stringify(json,null,4)))
+              .catch(ex => fullResp.resp = resp.statusText||ex.message)
+          } else {
+            resp.text()
+              .then(text=>fullResp.resp = text.length < 20000 ? apihl(text):parseHTML(text))
+              .catch(ex => fullResp.resp = parseHTML(resp.statusText||ex.message||'请求失败,请打开Chrome开发者工具(F12)进行调试'))
+          }
         }
       }
 
@@ -140,6 +143,7 @@ export default {
       } else {
         fullResp.cookies = [];
       }
+      document.querySelector('.resp-tab-content.ani').scrollTo({top:0,behavior: 'smooth'})
     })
     return {
       tab,
@@ -160,6 +164,6 @@ export default {
 .resp-tab-content.hide{height:0;overflow: hidden;}
 .resp-tab-content.full{height:calc(100vh - 62px);overflow-y: auto;}
 .cookie td{font-size:.5rem;padding:.2rem;}
-.code code{padding: .1rem .2rem ;background: #F7F7F7;}
+.code code{padding: .1rem .2rem ;background: #F7F7F7;white-space: pre-wrap;word-wrap: break-word;}
 </style>
     

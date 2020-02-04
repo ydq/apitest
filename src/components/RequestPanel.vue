@@ -14,7 +14,7 @@
       <button class="btn input-group-btn ml-2 tooltip tooltip-bottom" data-tooltip="清空所有内容" @click="mixin(req,emptyReq())"><i class="icon icon-refresh"></i> 重 置</button>
       <div class="dropdown dropdown-right ml-2 tooltip tooltip-left" data-tooltip="可以在URL以及请求头和参数中使用"><a class="btn dropdown-toggle" tabindex="0">{{env.curr.name||'设置环境变量'}} <i class="icon icon-caret"></i></a>
         <ul class="menu">
-          <li class="menu-item" @click="env.curr = {}"><a class="c-hand"><i class="icon icon-stop"></i> 禁用环境变量</a></li>
+          <li class="menu-item" @click="env.curr = {}"><a class="c-hand"><i class="icon icon-stop"></i> 停用环境变量</a></li>
           <li class="menu-item" v-for="item in env.list" @click="env.curr = item"><a class="c-hand"><i class="icon icon-flag"></i> {{item.name}}</a></li>
           <li class="menu-item" @click="env.show = true"><a class="c-hand"><i class="icon icon-edit"></i> 管理环境变量</a></li>
         </ul>

@@ -33,6 +33,9 @@
             </li>
           </ul>
           <ul class="menu" v-else>
+            <li class="menu-item" v-if="history.length" @click="clearHistory">
+              <a class="c-hand"><span class="label label-error"><i class="icon icon-delete"></i></span> 清空历史记录（最多30条）</a>
+            </li>
             <li class="menu-item tooltip tooltip-bottom" v-for="(h,i) in history" 
             :key="h.time"
             :data-tooltip="new Date(h.time).format('yyyy-MM-dd HH:mm:ss')">
@@ -75,16 +78,11 @@ import {API_HISTORY,API_FAV} from './scripts/const.js'
 
 export default {
   setup() {
-
     const history = ref(cache(API_HISTORY))
     const favlist = ref(cache(API_FAV))
-
     const req = reactive({history:{}})
-
     const resp = reactive({data:{}})
-
     const refresh = ref(Date.now())
-
     const tab = ref(0)
 
     const prettyName = req => {
@@ -99,12 +97,11 @@ export default {
           history.value.length = 30
         }
         cache(API_HISTORY,history.value)
-        tab.value = 1
       }
     }
 
     const addFav = i => {
-      favlist.value.unshift(history.value.splice(i,1)[0])
+      favlist.value.push(history.value.splice(i,1)[0])
       cache(API_FAV,favlist.value)
       cache(API_HISTORY,history.value)
     }
@@ -112,6 +109,11 @@ export default {
     const delFav = i => {
       favlist.value.splice(i,1)
       cache(API_FAV,favlist.value)
+    }
+
+    const clearHistory = () => {
+      cache(API_HISTORY,[])
+      history.value = []
     }
 
     return {
@@ -128,6 +130,7 @@ export default {
       prettyName,
       addFav,
       delFav,
+      clearHistory,
     }
   }
 }
