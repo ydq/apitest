@@ -119,7 +119,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 .env-mgr{height:380px;}
 .env-mgr-list,.env-mgr-edit{display:flex;flex-flow: column;}
 .env-mgr-list ul,.env-mgr-kv{min-width:auto;box-shadow: none;flex: 1;overflow-y: auto;}

@@ -129,10 +129,9 @@ export default {
       tab.curr = 0
       tab.hide = false
       tab.full = false
+      fullResp.headers = []
       if(!!resp.headers){
         resp.headers.forEach((val,key) => fullResp.headers.push({key,val}))
-      } else {
-        fullResp.header = []
       }
       parseRespData(resp)
       //利用Chrome的扩展接口去获取Cookie
@@ -159,7 +158,8 @@ export default {
 .bb{border-bottom: .05rem solid #dadee4;}
 .resp-tab-content{height:50vh;overflow-y: auto;}
 .resp-tab-content.hide{height:0;overflow: hidden;}
-.resp-tab-content.full{height:calc(100vh - 62px);overflow-y: auto !important;}
-.cookie td{font-size:.5rem;padding:.2rem !important;}
+.resp-tab-content.full{height:calc(100vh - 62px);overflow-y: auto;}
+.cookie td{font-size:.5rem;padding:.2rem;}
+.code code{padding: .1rem .2rem ;background: #F7F7F7;}
 </style>
     
