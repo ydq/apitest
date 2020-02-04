@@ -9,14 +9,7 @@
         <option value="put">PUT</option>
         <option value="delete">DELETE</option>
       </select>
-
-      <div class="has-icon-right">
-        <input class="form-input" type="text" v-model="req.url" placeholder="接口地址" maxlength="300"/>
-        <label class="form-icon tooltip tooltip-bottom c-hand" data-tooltip="接口地址的Cookie管理" v-if="req.cookie">
-          <i class="form-icon icon icon-emoji text-gray"></i>
-        </label>
-      </div>
-      
+      <input class="form-input" type="text" v-model="req.url" placeholder="接口地址" maxlength="300"/>
       <button class="btn btn-primary input-group-btn" @click="sendReq"><i class="icon icon-check"></i> 发 送</button>
       <button class="btn input-group-btn ml-2 tooltip tooltip-bottom" data-tooltip="清空所有内容" @click="mixin(req,emptyReq())"><i class="icon icon-refresh"></i> 重 置</button>
       <div class="dropdown dropdown-right ml-2 tooltip tooltip-left" data-tooltip="可以在URL以及请求头和参数中使用"><a class="btn dropdown-toggle" tabindex="0">{{env.curr.name||'设置环境变量'}} <i class="icon icon-caret"></i></a>
@@ -276,7 +269,5 @@ export default {
 .bb{border-bottom: .05rem solid #dadee4;}
 .request-panel{flex:1;overflow:hidden;display: flex;flex-flow: column;}
 .req-tab-content{flex: 1;overflow-y: auto;}
-.input-group .has-icon-right{flex: 1;}
-.input-group .has-icon-right input{width:100%;margin-left:-1px;border-radius:0}
 </style>
   

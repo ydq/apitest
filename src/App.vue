@@ -95,8 +95,8 @@ export default {
     const sendReq = fetchData => {
       resp.data = fetchData.resp
       if(!!fetchData.req){
-        if(history.value.unshift(clone(fetchData.req)) > 15){
-          history.value.length = 15
+        if(history.value.unshift(clone(fetchData.req)) > 30){
+          history.value.length = 30
         }
         cache(API_HISTORY,history.value)
         tab.value = 1

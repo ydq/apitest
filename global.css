@@ -20,3 +20,16 @@ textarea{resize: vertical;}
 .p-sticky{top:0;z-index:1;background:#F8F8F8;box-shadow: 0 1px 0 #dadee4}
 .ani{transition:all .5s ease}
 .fullh{height:100%;}
+/*代码高亮*/
+.apihl .apihl_cm { color: #008000; }
+.apihl .apihl_re { color: #800000; }
+.apihl .apihl_st { color: #800000; }
+.apihl .apihl_kw { color: #0000FF; }
+.apihl .apihl_mk { color: #0000FF; }
+.apihl .apihl_lb { color: #800000; }
+.apihl .apihl_vn { color: #FF0000; }
+.apihl .apihl_vl { color: #0000FF; }
+.apihl .apihl_sl { color: #800000; }
+.apihl .apihl_bl { color: #0000FF; }
+.apihl .apihl_cn { color: #FF0000; }
+.apihl .apihl_cv { color: #0000FF; }

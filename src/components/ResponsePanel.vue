@@ -11,16 +11,20 @@
           <a class="c-hand">Cookie</a>
         </li>
         <li class="tab-item tab-action">
-          <button class="btn btn-link btn-sm" @click="tab.hide = !tab.hide">
-            <span v-if="tab.hide"><i class="icon icon-arrow-up"></i> 展开</span>
+          <button class="btn btn-link btn-sm" @click="tab.full = !tab.full;tab.hide = false">
+            <span v-if="tab.full"><i class="icon icon-resize-vert"></i> 恢复</span>
+            <span v-else><i class="icon icon-arrow-up"></i> 全屏</span>
+          </button>
+          <button class="btn btn-link btn-sm" @click="tab.hide = !tab.hide;tab.full = false">
+            <span v-if="tab.hide"><i class="icon icon-resize-vert"></i> 恢复</span>
             <span v-else><i class="icon icon-arrow-down"></i> 收起</span>
           </button>
         </li>
     </ul>
     
-    <div class="resp-tab-content ani" :class="{hide:tab.hide}">
+    <div class="resp-tab-content ani" :class="{hide:tab.hide,full:tab.full}">
       <div v-if="tab.curr == 0">
-        <pre class="code">{{fullResp.resp}}</pre>
+        <pre class="code apihl"><code v-html="fullResp.resp"></code></pre>
       </div>
       <div v-else-if="tab.curr == 1">
         <table class="table p-relative">
@@ -94,13 +98,15 @@
   
 <script>
 import {ref,reactive,watch } from 'vue'
+import apihl from '../scripts/apihl.js'
 
 export default { 
   props:['resp'],
   setup(props) {
       const tab = reactive({
         curr:0,
-        hide:false
+        hide:false,
+        full:false
       })
       const fullResp = reactive({resp:'',headers:[],cookies:[]})
 
@@ -109,7 +115,11 @@ export default {
         if(resp.error){
           fullResp.resp = resp.error
         } else if(resp.status >= 200 && resp.status < 300){
-          resp.text().then(text=>fullResp.resp = text)
+          if(resp.headers.get('Content-Type').indexOf('application/json') >= 0){
+            resp.json().then(json=>fullResp.resp = apihl(JSON.stringify(json,null,4)))
+          } else {
+            resp.text().then(text=>fullResp.resp = apihl(text))
+          }
         } else {
           fullResp.resp = resp.statusText
         }
@@ -118,12 +128,13 @@ export default {
     watch(()=>props.resp,resp=>{
       tab.curr = 0
       tab.hide = false
-      parseRespData(resp)
+      tab.full = false
       if(!!resp.headers){
         resp.headers.forEach((val,key) => fullResp.headers.push({key,val}))
       } else {
         fullResp.header = []
       }
+      parseRespData(resp)
       //利用Chrome的扩展接口去获取Cookie
       if(!!resp.url && !!chrome && !!chrome.cookies){
         chrome.cookies.getAll({url:resp.url},cookies => fullResp.cookies = cookies)
@@ -146,8 +157,9 @@ export default {
 .p_key{width:20%}
 .p_ops{width:5%}
 .bb{border-bottom: .05rem solid #dadee4;}
-.resp-tab-content{max-height:293px;height:293px;overflow-y: auto;}
+.resp-tab-content{height:50vh;overflow-y: auto;}
 .resp-tab-content.hide{height:0;overflow: hidden;}
+.resp-tab-content.full{height:calc(100vh - 62px);overflow-y: auto !important;}
 .cookie td{font-size:.5rem;padding:.2rem !important;}
 </style>
     
