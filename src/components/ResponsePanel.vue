@@ -115,8 +115,8 @@ export default {
       const parseRespData = (resp) => {
         if(resp.error){
           fullResp.resp = resp.error
-        } else {
-          if(resp.headers.get('Content-Type').indexOf('application/json') >= 0){
+        } else if(resp.status){
+          if(resp.headers && resp.headers.get('Content-Type') && resp.headers.get('Content-Type').indexOf('application/json') >= 0){
             resp.json()
               .then(json=>fullResp.resp = apihl(JSON.stringify(json,null,4)))
               .catch(ex => fullResp.resp = resp.statusText||ex.message)

@@ -11,7 +11,7 @@
       </select>
       <input class="form-input" type="text" v-model="req.url" placeholder="接口地址" maxlength="300"/>
       <button class="btn btn-primary input-group-btn" @click="sendReq"><i class="icon icon-check"></i> 发 送</button>
-      <button class="btn input-group-btn ml-2 tooltip tooltip-bottom" data-tooltip="清空所有内容" @click="mixin(req,emptyReq())"><i class="icon icon-refresh"></i> 重 置</button>
+      <button class="btn input-group-btn ml-2 tooltip tooltip-bottom" data-tooltip="清空所有内容" @click="resetRequest"><i class="icon icon-refresh"></i> 重 置</button>
       <div class="dropdown dropdown-right ml-2 tooltip tooltip-left" data-tooltip="可以在URL以及请求头和参数中使用"><a class="btn dropdown-toggle" tabindex="0">{{env.curr.name||'设置环境变量'}} <i class="icon icon-caret"></i></a>
         <ul class="menu">
           <li class="menu-item" @click="env.curr = {}"><a class="c-hand"><i class="icon icon-stop"></i> 停用环境变量</a></li>
@@ -206,9 +206,8 @@ export default {
         req.params = req.type == 'get' || req.paramsType == FORM_CONTENT_TYPE ? parseText(reqParam.params):''
         req.headers = parseText(reqParam.headers)
         req.time = Date.now();
-        let headers = parseObject(reqParam.headers,parseEnv);
-        headers['Content-Type'] = req.paramsType;
         let url = parseEnv(req.url);
+        let headers = parseObject(reqParam.headers,parseEnv);
         let opts = {
           method:req.type,
           headers,
@@ -217,12 +216,26 @@ export default {
         if(req.type == 'get'){
           let queryStr = parseQueryStr(reqParam.params,parseEnv)
           url = !queryStr?url:(url + (url.indexOf('?')>0?'&':'?') + queryStr)
-        } else if(req.paramsType == FORM_CONTENT_TYPE){
-          opts.body = parseFormData(reqParam.params,parseEnv)
-        } else if(!!req.body){
-          opts.body = parseEnv(req.body)
-        }
+        } else {
+          let hasparam = false
+          if(req.paramsType == FORM_CONTENT_TYPE){
+            if(reqParam.params.filter(el=> el.key).length){
+              opts.body = parseFormData(reqParam.params,parseEnv)
+              hasparam = true
+            }
+          } else if(!!req.body){
+            opts.body = parseEnv(req.body)
+            hasparam = true
+          }
+          let ct = reqParam.headers.filter(el => el.key.toLowerCase() == 'content-type');
+          if(!ct.length && hasparam){
+            headers['Content-Type'] = req.paramsType;
+          }
+        } 
         let success = true;
+        if(!/^https?:\/\//i.test(url)){
+          url = 'http://'+url
+        }
         let resp = await fetch(url,opts).catch(ex => {
           emit('sendReq',{resp:{error:ex.message},req})
           success = false
@@ -231,6 +244,11 @@ export default {
           emit('sendReq',{resp,req})
         }
       }
+    }
+
+    const resetRequest = () => {
+      mixin(req,emptyReq())
+      emit('sendReq',{resp:{error:' '}})
     }
       
     //监听数组 当数组被删除到没有了自动增加一行
@@ -256,6 +274,7 @@ export default {
       openBatchEditor,
       saveBatchContent,
       sendReq,
+      resetRequest,
     }
   }
 }

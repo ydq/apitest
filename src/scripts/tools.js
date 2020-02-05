@@ -24,12 +24,12 @@ const parseArr = (str) => str.split(/[\r|\n]+/)
 
 const parseFormData = (arr,fn=o=>o) => {
     let form = new FormData()
-    arr.filter(item => item.key && item.val)
+    arr.filter(item => item.key)
         .forEach(item => form.append(fn(item.key),fn(item.val)));
     return form;
 }
 const parseQueryStr = (arr,fn=o=>o) => arr
-    .filter(item => item.key && item.val)
+    .filter(item => item.key)
     .map(item => `${fn(item.key)}=${fn(item.val)}`)
     .join('&')
 
@@ -40,7 +40,7 @@ const parseText = (arr) =>
 
 const parseObject = (arr,fn=o=>o) => {
     let obj = {};
-    arr.filter(item => item.key||item.val)
+    arr.filter(item => item.key)
     .forEach(item => obj[fn(item.key)] = fn(item.val));
     return obj;
 }

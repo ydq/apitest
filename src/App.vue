@@ -33,7 +33,7 @@
             </li>
           </ul>
           <ul class="menu" v-else>
-            <li class="menu-item" v-if="history.length" @click="clearHistory">
+            <li class="menu-item p-sticky clear-history-btn" v-if="history.length" @click="clearHistory">
               <a class="c-hand"><span class="label label-error"><i class="icon icon-delete"></i></span> 清空历史记录（最多30条）</a>
             </li>
             <li class="menu-item tooltip tooltip-bottom" v-for="(h,i) in history" 
@@ -147,5 +147,6 @@ i.c-hand{cursor: pointer !important;}
 .left-side,.main-container{display: flex;flex-flow: column;overflow: hidden;}
 .left-side>div{flex: 1;overflow-y: auto;}
 .left-tab-content{position: relative;}
+.clear-history-btn{top:-5px;background:#fff;}
 </style>
   
