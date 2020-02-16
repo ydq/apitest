@@ -3,7 +3,7 @@ const apihl = oText => {
         spanl:'<span class="apihl_',
         spanm :'">',
         spanr:'</span>',
-        textToHTML:text=>text.replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+        textToHTML:text=>text.replace(/</g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
         normalLabel:text=>{
             let parts = /^(<[!\/]?)([a-z_][\w:]*)([^>]*?(?=[\/>]))(\/?>)$/i.exec(text);
             return (core.spanl + 'mk' + core.spanm + core.textToHTML(parts[1]) + core.spanr

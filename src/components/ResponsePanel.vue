@@ -110,7 +110,7 @@ export default {
       })
       const fullResp = reactive({resp:'',headers:[],cookies:[]})
 
-      const parseHTML = text => text.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      const parseHTML = text => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
       const parseRespData = (resp) => {
         if(resp.error){
