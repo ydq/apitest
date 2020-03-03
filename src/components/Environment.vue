@@ -40,8 +40,8 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="item in env.items" :key="item">
-                                        <td class="p-1"><input type="text" class="form-input input-sm" v-model="item.key"/></td>
-                                        <td class="p-1"><input type="text" class="form-input input-sm" v-model="item.val"/></td>
+                                        <td class="p-1"><input type="text" class="form-input input-sm" v-model="item.key" /></td>
+                                        <td class="p-1"><input type="text" class="form-input input-sm" v-model="item.val" /></td>
                                         <td class="p-1"><button class="btn btn-link btn-sm" @click="env.items.splice(i,1)"><i class="icon icon-cross"></i></button></td>
                                     </tr>
                                 </tbody>
@@ -54,57 +54,54 @@
     </div>
 </template>
 <script>
-import { ref,reactive,effect } from 'vue'
-import {API_ENV} from '../scripts/const.js'
-import {cache,clone,mixin,checkArr,addItem} from '../scripts/tools.js'
-
+import { ref, reactive, watchEffect as effect } from "vue";
+import { API_ENV } from "../scripts/const.js";
+import { cache, clone, mixin, checkArr, addItem } from "../scripts/tools.js";
 
 export default {
-    setup(props,{emit}) {
-
-        const envlist = ref(cache(API_ENV))
+    setup(props, { emit }) {
+        const envlist = ref(cache(API_ENV));
 
         const emptyEnv = {
-            name:'',
-            items:[],
-            index:-1
-        }
+            name: "",
+            items: [],
+            index: -1
+        };
 
-        const env = reactive(clone(emptyEnv))
-        
-        const addEnv = () => mixin(env,emptyEnv)
-        const editEnv = (i) => {
-            let sel = envlist.value[i]
-            env.name = sel.name
-            env.items = sel.items.filter(el => el.key || el.val)
+        const env = reactive(clone(emptyEnv));
+
+        const addEnv = () => mixin(env, emptyEnv);
+        const editEnv = i => {
+            let sel = envlist.value[i];
+            env.name = sel.name;
+            env.items = sel.items.filter(el => el.key || el.val);
             env.index = i;
-        }
+        };
 
         const saveEnv = () => {
             let curr = {
-                name:env.name,
-                items:env.items.filter(el => el.key || el.val)
+                name: env.name,
+                items: env.items.filter(el => el.key || el.val)
             };
-            if(env.index == -1){
-                envlist.value.push(curr)
+            if (env.index == -1) {
+                envlist.value.push(curr);
             } else {
                 envlist.value[env.index] = curr;
             }
-            mixin(env,emptyEnv)
-            cache(API_ENV,envlist.value)
-        }
+            mixin(env, emptyEnv);
+            cache(API_ENV, envlist.value);
+        };
         const delEnv = () => {
-            if(env.index >= 0){
-                envlist.value.splice(env.index,1)
-                mixin(env,emptyEnv)
-                cache(API_ENV,envlist.value)
+            if (env.index >= 0) {
+                envlist.value.splice(env.index, 1);
+                mixin(env, emptyEnv);
+                cache(API_ENV, envlist.value);
             }
-        }
+        };
 
-        const close = () => emit('refreshEnv')
+        const close = () => emit("refreshEnv");
 
-        effect(()=>checkArr(env.items))
-        
+        effect(() => checkArr(env.items));
 
         return {
             env,
@@ -114,18 +111,40 @@ export default {
             addItem,
             saveEnv,
             delEnv,
-            close,
-        }
+            close
+        };
     }
-}
+};
 </script>
 <style scoped>
-.env-mgr{height:380px;}
-.env-mgr-list,.env-mgr-edit{display:flex;flex-flow: column;}
-.env-mgr-list ul,.env-mgr-kv{min-width:auto;box-shadow: none;flex: 1;overflow-y: auto;}
-.env-mgr-name{flex:none;}
-.wbg{background:#fff;}
-.env-key{width:40%}
-.env-val{width:50%}
-.env-ops{width:10%}
+.env-mgr {
+    height: 380px;
+}
+.env-mgr-list,
+.env-mgr-edit {
+    display: flex;
+    flex-flow: column;
+}
+.env-mgr-list ul,
+.env-mgr-kv {
+    min-width: auto;
+    box-shadow: none;
+    flex: 1;
+    overflow-y: auto;
+}
+.env-mgr-name {
+    flex: none;
+}
+.wbg {
+    background: #fff;
+}
+.env-key {
+    width: 40%;
+}
+.env-val {
+    width: 50%;
+}
+.env-ops {
+    width: 10%;
+}
 </style>

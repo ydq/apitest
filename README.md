@@ -1,4 +1,4 @@
-使用Vue3（alpha4）开发的一款仿Postman的超轻量级Api接口测试工具，已经发布到 [Chrome 应用商店](https://chrome.google.com/webstore/detail/apitest/nenlipcaoobapddihcmlpjdoilcaomhe)
+使用Vue3（alpha7）开发的一款仿Postman的超轻量级Api接口测试工具，已经发布到 [Chrome 应用商店](https://chrome.google.com/webstore/detail/apitest/nenlipcaoobapddihcmlpjdoilcaomhe)
 
 - 支持自定义参数和请求头
 - 支持是否使用Cookie
@@ -17,3 +17,7 @@
 7. 点击发送按钮会发送本次请求进行接口测试，并将响应结果显示在下方的响应面板中，本次的请求记录也会自动记录在左侧的历史记录中
 8. 当觉得历史记录中的请求可能后续会多次用到，则可以点击左侧历史记录中的收藏，将历史记录进行永久收藏
 9. 历史记录最多记录最后的30条记录，也可以手动清空历史记录
+
+更新日志:
+- 升级至Vue3(alpha7)( 修复effect 在 alpha7 不兼容的问题 )
+- 添加一个watch脚本，方便在chrome中直接开发而无需频繁的build
