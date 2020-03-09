@@ -11,6 +11,10 @@
                 <a class="c-hand">Cookie</a>
             </li>
             <li class="tab-item tab-action">
+                <label class="form-switch form-inline c-hand">
+                    <input type="checkbox" v-model="wordwrap">
+                    <i class="form-icon"></i> 自动换行
+                </label>
                 <button class="btn btn-link btn-sm" @click="tab.full = !tab.full;tab.hide = false">
                     <span v-if="tab.full"><i class="icon icon-resize-vert"></i> 恢复</span>
                     <span v-else><i class="icon icon-arrow-up"></i> 全屏</span>
@@ -24,7 +28,7 @@
 
         <div class="resp-tab-content ani" :class="{hide:tab.hide,full:tab.full}">
             <div v-if="tab.curr == 0">
-                <pre class="code m-1 apihl"><code v-html="fullResp.resp"></code></pre>
+                <pre class="code m-1 apihl"><code v-html="fullResp.resp" :class="{'wordwrap':wordwrap}"></code></pre>
             </div>
             <div v-else-if="tab.curr == 1">
                 <table class="table p-relative">
@@ -108,6 +112,7 @@ export default {
             hide: false,
             full: false
         });
+        const wordwrap = ref(true)
         const fullResp = reactive({ resp: "", headers: [], cookies: [] });
 
         const parseHTML = text =>
@@ -143,7 +148,7 @@ export default {
                         .then(
                             text =>
                                 (fullResp.resp =
-                                    text.length < 20000
+                                    text.length < 30000
                                         ? apihl(text)
                                         : parseHTML(text))
                         )
@@ -188,6 +193,7 @@ export default {
         );
         return {
             tab,
+            wordwrap,
             parseRespData,
             fullResp
         };
@@ -229,6 +235,9 @@ export default {
 .code code {
     padding: 0.1rem 0.2rem;
     background: #f7f7f7;
+}
+.wordwrap{
+
     white-space: pre-wrap;
     word-wrap: break-word;
 }
